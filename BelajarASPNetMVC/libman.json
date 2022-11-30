@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap@4.6.1",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "admin-lte@3.2.0",
+      "destination": "wwwroot/lib/admin-lte/"
+    },
+    {
+      "library": "morris.js@0.5.0",
+      "destination": "wwwroot/lib/morris.js/"
+    },
+    {
+      "library": "ajax@0.0.4",
+      "destination": "wwwroot/lib/ajax/"
+    }
+  ]
+}

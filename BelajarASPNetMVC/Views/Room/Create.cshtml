@@ -1,0 +1,170 @@
+﻿@model BelajarASPNetMVC.Models.Rooms.CreateRoomViewModel
+
+@{
+    ViewBag.Title = "Create Room";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Create Room</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Create Room
+            </div>
+            <p></p>
+            @using (Html.BeginForm("Create", "Room", null, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "Room Name", @style = "width:150px" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <input type="file" id="file" name="file" multiple="multiple" />
+                            <img id="displayImage" src="#" alt="Layout" style="height:100px;width:200px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Capacity, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Capacity, new { htmlAttributes = new { style = "width:250px", rows = "3", @class = "form-control", @placeholder = "Room Description" } })
+                            @Html.ValidationMessageFor(model => model.Capacity, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { style = "width:250px", rows = "3", @class = "form-control", @placeholder = "Room Description" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { style = "width:250px", rows = "3", @class = "form-control", @placeholder = "Room Description" } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LayoutId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                @Html.DropDownList("LayoutId", new SelectList(Enumerable.Empty<SelectListItem>()))
+                                <span class="help-block">
+                                    @Html.ValidationMessageFor(model => model.LayoutId, "", new { @class = "text-danger" })
+                                </span>
+                            </div>
+                        </div>
+                        <span class="help-block">
+                            @Html.ValidationMessageFor(model => model.LayoutId, "", new { @class = "text-danger" })
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                            <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Room")';return false;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="lookupLayout" class="modal fade" data-keyboard="false">
+    <div class="page-loading page-loading-boxed">
+        <img src="../../assets/global/img/loading-spinner-grey.gif" alt="" class="loading">
+        <span>
+            &nbsp;&nbsp;Loading...
+        </span>
+    </div>
+    <div class="modal-dialog modal-lg">
+
+        <div class="portlet box purple">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>Layout List
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="modal-content">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Layout/GetAllLayout",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (data) {
+                var $select = $('#LayoutId');
+                $("#LayoutId").empty();
+                $("#LayoutId").append("<option value='0'>--Select Layout--</option>");
+                console.log(data);
+                $(data).each(function (index) {
+                    console.log(index);
+                    $('<option>', {
+                        value: data[index].id
+                    }).html(data[index].layoutTitle).appendTo($select);
+                });
+            },
+            error: function (data) { }
+        });
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#displayImage').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#file").change(function () {
+        readURL(this);
+    });
+</script>

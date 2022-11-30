@@ -1,0 +1,56 @@
+﻿@model BelajarASPNetMVC.Models.Beverages.EditBeverageViewModel
+
+@{
+    ViewBag.Title = "View Beverage";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">View Beverage</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                View Beverage
+            </div>
+            <p></p>
+            @using (Html.BeginForm())
+            {
+                <div>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </dt>
+                        <dt>
+                            @Html.DisplayFor(model => model.Title)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </dt>
+                        <dt>
+                            @Html.DisplayFor(model => model.Price)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+                        <dt>
+                            @Html.DisplayFor(model => model.Description)
+                        </dt>
+                    </dl>
+                </div>
+
+                <p>
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Beverage")';return false;">Cancel</button>
+                </p>
+            }
+        </div>
+    </div>
+</div>
+

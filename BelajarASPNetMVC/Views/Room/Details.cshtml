@@ -1,0 +1,77 @@
+﻿@model BelajarASPNetMVC.Models.Rooms.RoomViewModel
+
+@{
+    ViewBag.Title = "Details Room";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Details Room</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Details Room
+            </div>
+            <p></p>
+            <div>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Capacity)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Capacity)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Price)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Image)
+                    </dt>
+
+                    <dd>
+                        <img alt="" src="@ViewBag.Base64String" style="height:100px;width:200px;" />
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<p>
+    <button class="btn btn-primary" onclick="location.href='@Url.Action("Edit", "Room", new { id = Model.Id })';return false;">Edit</button>
+    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Room")';return false;">Cancel</button>
+</p>
