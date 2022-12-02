@@ -27,7 +27,9 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.LayoutTitle, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="form-group input-group">
-                            @Html.EditorFor(model => model.LayoutTitle, new { htmlAttributes = new { @class = "form-control", @placeholder = "Layout Name", @style = "width:150px" } })
+                            @Html.EditorFor(model => model.LayoutTitle, 
+                                new { htmlAttributes = new { @class = "form-control", 
+                                @placeholder = "Layout Name", @style = "width:150px" } })
                             @Html.ValidationMessageFor(model => model.LayoutTitle, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -35,7 +37,9 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.LayoutDescription, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="form-group input-group">
-                            @Html.TextAreaFor(model => model.LayoutDescription, new { htmlAttributes = new { style = "width:250px", rows = "3", @class = "form-control", @placeholder = "Layout Description" } })
+                            @Html.TextAreaFor(model => model.LayoutDescription, 
+                                new { htmlAttributes = new { style = "width:250px", rows = "3", @class = "form-control", 
+                                @placeholder = "Layout Description" } })
                             @Html.ValidationMessageFor(model => model.LayoutDescription, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -44,7 +48,8 @@
                         @Html.LabelFor(model => model.LayoutPrice, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="form-group input-group">
                             <span class="input-group-addon">Rp</span>
-                            @Html.EditorFor(model => model.LayoutPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Layout Price Per Hour", @style = "width:200px" } })
+                            @Html.EditorFor(model => model.LayoutPrice, new { htmlAttributes = new { @class = "form-control", 
+                            @placeholder = "Layout Price Per Hour", @style = "width:200px" } })
                             @Html.ValidationMessageFor(model => model.LayoutPrice, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -52,7 +57,8 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.LayoutCapacity, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="form-group input-group">
-                            @Html.EditorFor(model => model.LayoutCapacity, new { htmlAttributes = new { @class = "form-control", @placeholder = "Layout Capacity", @style = "width:150px" } })
+                            @Html.EditorFor(model => model.LayoutCapacity, new { htmlAttributes = new { @class = "form-control", 
+                            @placeholder = "Layout Capacity", @style = "width:150px" } })
                             @Html.ValidationMessageFor(model => model.LayoutCapacity, "", new { @class = "text-danger" })
                         </div>
                     </div>

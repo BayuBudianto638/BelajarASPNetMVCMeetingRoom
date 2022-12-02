@@ -131,7 +131,7 @@ namespace BelajarASPNetMVC.Controllers
                     }
 
                     var editLayout = _mapper.Map<LayoutDto>(model);
-                    editLayout.LayoutImages = rawBytes;
+                    editLayout.LayoutImages = rawBytes; // save ke db (Bad Idea)
                     editLayout.LayoutFilePath = "";
 
                     _layoutAppService.Update(editLayout);

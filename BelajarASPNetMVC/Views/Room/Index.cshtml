@@ -37,7 +37,8 @@
                             {
                                 <tr class="odd gradeX">
                                     <td>
-                                        <img id="Images" style="width:60px;height:50px;" src='@Url.Action("GetFile", "Room", new {id = mst.Id})' />
+                                        <img id="Images" style="width:60px;height:50px;" 
+                                                src='@Url.Action("GetFile", "Room", new {id = mst.Id})' />
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => mst.Title)

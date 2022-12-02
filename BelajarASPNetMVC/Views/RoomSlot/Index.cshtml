@@ -1,0 +1,382 @@
+﻿@model IEnumerable<BelajarASPNetMVC.Models.RoomSlots.CreateRoomSlotViewModel>
+
+@{
+    ViewBag.Title = "Room Slot";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Room Slot</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Room Slot
+            </div>
+            <p></p>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2"> Month </label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Month", Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(x) }), "Select Month", new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2"> Year </label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.LastTenYears, "Pilih Year", new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                     <label class="col-md-2"> Layout </label>
+                    <div class="col-md-10">
+                        <select id="LayoutName" class="form-control" style="width:150px"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button class="btn btn-primary" id="search">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="panel-body">
+                <div class="dataTable_wrapper">
+                    <table class="table table-condensed table-hover" id="tableRoomSlot">
+                        <thead>
+                            <tr>
+                                <th>Room</th>
+                                <th>Layout</th>
+                                <th>Capacity</th>
+                                <th>Month</th>
+                                <th>Year</th>
+                                <th>Day</th>
+                                <th>09:00</th>
+                                <th>10:00</th>
+                                <th>11:00</th>
+                                <th>12:00</th>
+                                <th>13:00</th>
+                                <th>14:00</th>
+                                <th>15:00</th>
+                                <th>16:00</th>
+                                <th>17:00</th>
+                                <th>18:00</th>
+                                <th>19:00</th>
+                                <th>20:00</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <p>
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Create", "RoomSlot")';">Generate</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade dialogformmodal" tabindex="-1" role="dialog" aria-labelledby="termformmodal" aria-hidden="true" id="dialogformmodal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Delete record?</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="requestacallform" method="POST" name="requestacallform">
+                        <p>Are you sure want to delete this record?</p>
+                        <input id="idRoomSlot" type="text" hidden />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnYes" type="button" class="btn btn-danger">Yes</button>
+                    <button id="btnNo" type="button" class="btn btn-primary">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade successformmodal" tabindex="-1" role="dialog" aria-labelledby="termformmodal" aria-hidden="true" id="successformmodal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Success</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="requestacallform" method="POST" name="requestacallform">
+                        <p>Delete success...</p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnOK" type="button" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade failedformmodal" tabindex="-1" role="dialog" aria-labelledby="termformmodal" aria-hidden="true" id="failedformmodal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Failed</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="requestacallform" method="POST" name="requestacallform">
+                        <p>Delete failed...</p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnOK" type="button" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade viewbookformmodal" tabindex="-1" role="dialog" aria-labelledby="termformmodal" aria-hidden="true" id="viewbookformmodal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="requestacallform" method="POST" name="requestacallform">
+                        <p>Delete failed...</p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnOK" type="button" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const monthNames = ["None", "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Layout/GetAllLayout",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (data) {
+                console.log(data);
+                var $select = $('#LayoutName');
+                $("#LayoutName").empty();
+                $("#LayoutName").append("<option value='0'>--Select Room Layout--</option>");
+                $(data).each(function (index) {
+                    $('<option>', {
+                        value: data[index].id
+                    }).html(data[index].layoutTitle).appendTo($select);
+                });
+            },
+            error: function (data) { }
+        });
+    });
+
+    $("#search").click(function () {
+        loadData();
+    });
+
+    function loadData() {
+        var id = $('#LayoutName').find(":selected").val();
+
+        $.ajax({
+            type: 'GET',
+            url: "/RoomSlot/GetRoomSlot",
+            contentType: "text/plain",
+            dataType: 'json',
+            data: {
+                month: $('#Month').val(),
+                year: $('#Year').val(),
+                roomId: id
+            },
+            success: function (data) {
+                var roomSlotTable = $('#tableRoomSlot tbody');
+                roomSlotTable.empty();
+                $(data).each(function (index) {
+                    console.log(data);
+                    roomSlotTable.append('<tr><td>' +
+                        data[index].layoutTitle + '</td><td>' +
+                        data[index].layoutTitle + '</td><td>' +
+                        data[index].capacity + '</td><td>' +
+                        monthNames[data[index].month] + '</td><td>' +
+                        data[index].year + '</td><td>' +
+                        data[index].days + '</td><td id="hour' + data[index].days + 1 + (index + 1) + '">' +
+                        data[index].hour1 + '</td><td id="hour' + data[index].days + 2 + (index + 1) + '">' +
+                        data[index].hour2 + '</td><td id="hour' + data[index].days + 3 + (index + 1) + '">' +
+                        data[index].hour3 + '</td><td id="hour' + data[index].days + 4 + (index + 1) + '">' +
+                        data[index].hour4 + '</td><td id="hour' + data[index].days + 5 + (index + 1) + '">' +
+                        data[index].hour5 + '</td><td id="hour' + data[index].days + 6 + (index + 1) + '">' +
+                        data[index].hour6 + '</td><td id="hour' + data[index].days + 7 + (index + 1) + '">' +
+                        data[index].hour7 + '</td><td id="hour' + data[index].days + 8 + (index + 1) + '">' +
+                        data[index].hour8 + '</td><td id="hour' + data[index].days + 9 + (index + 1) + '">' +
+                        data[index].hour9 + '</td><td id="hour' + data[index].days + 10 + (index + 1) + '">' +
+                        data[index].hour10 + '</td><td id="hour' + data[index].days + 11 + (index + 1) + '">' +
+                        data[index].hour11 + '</td><td id="hour' + data[index].days + 12 + (index + 1) + '">' +
+                        data[index].hour13 + '</td><td style="display:none;" id="isActive' + data[index].days + 14 + (index + 1) + '">' +
+                        data[index].isActive + '</td><td>' +
+                        '<a class="btn btn-danger btn-circle" value="X" onClick="Delete(' + data[index].Id + ');"><i class="fa fa-times"></i></a></td></tr>');
+                });
+
+                month = $('#Month').val();
+                year = $('#Year').val();
+
+                DefaultColor(month, year);
+                DeleteSlotColor(month, year);
+            },
+            error: function (e) {
+                // error message here
+                // try use toastr
+            }
+        });
+    }
+
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+
+    function DefaultColor(month, year) {
+        var days = daysInMonth(month, year);
+
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+        var curMonth = today.getMonth() + 1;
+        var curDay = today.getDate();
+
+        if (parseInt(curMonth) > parseInt(month)) {
+            for (i = 1; i <= days; i++) {
+                for (j = 1; j <= 13; j++) {
+                    $("#hour" + i + j + i).attr("bgcolor", "#C0C0C0");
+                    $("#hour" + i + j + i).css('color', '#C0C0C0');
+                }
+            }
+
+            return false;
+        }
+
+        for (i = 1; i <= days; i++) {
+            for (j = 1; j <= 13; j++) {
+                var value = $("#hour" + i + j + i).text();
+
+                if (parseInt(curDay) > parseInt(i)) {
+                    if (parseInt(value) == 1) {
+                        $("#hour" + i + j + i).attr("bgcolor", "#FF0000");
+                        $("#hour" + i + j + i).css('color', '#FF0000');
+                    }
+                    else {
+                        $("#hour" + i + j + i).attr("bgcolor", "#C0C0C0");
+                        $("#hour" + i + j + i).css('color', '#C0C0C0');
+                    }
+                } else {
+                    if (parseInt(value) == 1) {
+                        $("#hour" + i + j + i).attr("bgcolor", "#FF0000");
+                        $("#hour" + i + j + i).css('color', '#FF0000');
+                    } else {
+                        $("#hour" + i + j + i).attr("bgcolor", "#00FF00");
+                        $("#hour" + i + j + i).css('color', '#00FF00');
+                    }
+                }
+            }
+        }
+    }
+
+    function DeleteSlotColor(month, year) {
+        var days = daysInMonth(month, year);
+
+        for (i = 1; i <= days; i++) {
+            var value = $("#isActive" + i + 14 + i).text();
+            if (parseInt(value) == 0) {
+                for (j = 1; j <= 13; j++) {
+                    $("#hour" + i + j + i).attr("bgcolor", "#0000A0");
+                    $("#hour" + i + j + i).css('color', '#0000A0');
+                    $(':input[type="submit"]').prop('disabled', true);
+                }
+            }
+        }
+    }
+
+    function Delete(Id) {
+        $('#idRoomSlot').val(Id);
+        $('#dialogformmodal').modal('toggle');
+    }
+
+    $("#btnYes").on('click', function () {
+        var idRoomSlot = $('#idRoomSlot').val();
+
+        $.ajax({
+            url: "/RoomSlot/DeleteById?id=" + idRoomSlot,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (data) {
+                alert('Success!');
+            },
+            error: function (data) {
+                alert('Failed!');
+            }
+        });
+
+        $('#dialogformmodal').modal('toggle');
+    });
+
+    $("#btnNo").on('click', function () {
+        $('#dialogformmodal').modal('toggle');
+    });
+
+    $("#btnIsActive").on('click', function () {
+        var idRoomSlot = $('#isActive151415').text();
+        alert(idRoomSlot);
+    });
+</script>
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    .good {
+        background-color: #0c0;
+    }
+
+    .poor {
+        background-color: #c00;
+    }
+</style>

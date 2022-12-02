@@ -17,6 +17,7 @@ namespace BelajarASPNetMVC.Data
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Room> Room { get; set; }
         public DbSet<RoomSlot> RoomSlot { get; set; }
+        public DbSet<User> User { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }

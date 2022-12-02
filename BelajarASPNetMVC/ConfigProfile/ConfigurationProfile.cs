@@ -3,11 +3,13 @@ using BelajarASPNetMVC.Application.Services.Beverages.Dto;
 using BelajarASPNetMVC.Application.Services.Equipments.Dto;
 using BelajarASPNetMVC.Application.Services.Layouts.Dto;
 using BelajarASPNetMVC.Application.Services.Rooms.Dto;
+using BelajarASPNetMVC.Application.Services.RoomSlots.Dto;
 using BelajarASPNetMVC.Data.Databases;
 using BelajarASPNetMVC.Models.Beverages;
 using BelajarASPNetMVC.Models.Equipments;
 using BelajarASPNetMVC.Models.Layouts;
 using BelajarASPNetMVC.Models.Rooms;
+using BelajarASPNetMVC.Models.RoomSlots;
 
 namespace BelajarASPNetMVC.ConfigProfile
 {
@@ -86,6 +88,12 @@ namespace BelajarASPNetMVC.ConfigProfile
 
             CreateMap<RoomViewModel, RoomDto>();
             CreateMap<RoomDto, RoomViewModel>();
+
+            CreateMap<CreateRoomSlotViewModel, RoomSlotDto>();
+            CreateMap<RoomSlotDto, CreateRoomSlotViewModel>();
+
+            CreateMap<RoomSlotDto, RoomSlot>();
+            CreateMap<RoomSlot, RoomSlotDto>();
         }
     }
 }

@@ -1,0 +1,215 @@
+﻿@model IEnumerable<BelajarASPNetMVC.Models.RoomSlots.RoomSlotViewModel>
+
+@{
+    ViewBag.Title = "Delete Room Slot";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Delete Room Slot</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Room Slot
+            </div>
+            <p></p>
+            @*@using (Html.BeginForm())
+            {
+            @Html.AntiForgeryToken()*@
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2"> Month </label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Month", Enumerable.Range(1, 12).Select(x => new SelectListItem { Value = x.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(x) }), "--Select Month--", new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2"> Year </label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.LastTenYears, "--Select Year--", new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2"> Day </label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Day", Enumerable.Range(1, 31).Select(x => new SelectListItem { Value = x.ToString() }), "--Select Day--", new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                     <label class="col-md-2"> Room </label>
+                    <div class="col-md-10">
+                        <select id="RoomName" class="form-control" style="width:150px"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button class="btn btn-primary" id="search">Search</button>
+                    </div>
+                </div>
+            </div>
+            @*}*@
+        </div>
+
+        <div class="form-horizontal">
+            <div class="panel-body">
+                <div class="dataTable_wrapper">
+                    <table class="table table-condensed table-hover" id="dataTables-example">
+                        <thead>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <p>
+                    <input id="delete" value="Delete" class="btn btn-primary" />
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Room/GetAllRoom",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (data) {
+                //console.log(data);
+                var $select = $('#RoomName');
+                $("#RoomName").empty();
+                $("#RoomName").append("<option value='0'>--Select Room--</option>");
+                $(data).each(function (index) {
+                    console.log($("#RoomName").val());
+                    $('<option>', {
+                        value: data[index].Id
+                    }).html(data[index].MeetingRoomTitle).appendTo($select);
+                });
+            },
+            error: function (data) { }
+        });
+    });
+
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+
+    $('#Year').on('change', function () {
+        var $select = $('#Day');
+        $("#Day").empty();
+        $("#Day").append("<option value='0'>--Select Day--</option>");
+
+        var numDays = daysInMonth($("#Month").val(), $("#Year").val());
+        for (var i = 1; i <= numDays; i++) {
+            $('<option>', {
+                value: i
+            }).html(i).appendTo($select);
+        }
+    });
+
+    $(document).ready(function () {
+        $('#dataTables-example"').dataTable({
+            "bDestroy": true
+        }).fnDestroy();
+
+        $('#dataTables-example"').dataTable({
+            "aoColumnDefs": [{
+                "bSortable": false,
+                "aTargets": ["sorting_disabled"]
+            }],
+            "bDestroy": true
+        }).fnDestroy();
+    });
+
+    $("#delete").click(function () {
+        $.post("@Url.Action("DeleteData", "RoomSlot")",
+            {
+                month: $('#Month').val().trim(),
+                year: $('#Year').val().trim(),
+                day: $('#Day').val().trim(),
+                roomId: $('#RoomName').val().trim()
+            },
+            function (data, status) {
+                alert("Success!");
+            });
+    });
+
+    // Premade test data, you can also use your own
+    var testDataUrl = "/RoomSlot/GetRoomSlot";
+
+    $("#search").click(function () {
+        loadData();
+    });
+
+    function loadData() {
+        $.ajax({
+            type: 'GET',
+            url: testDataUrl,
+            contentType: "text/plain",
+            dataType: 'json',
+            data: {
+                month: $('#Month').val(),
+                year: $('#Year').val(),
+                roomId: $('#RoomName').val()
+            },
+            success: function (data) {
+                myJsonData = data;
+                populateDataTable(myJsonData);
+            },
+            error: function (e) {
+                console.log("There was an error with your request...");
+                console.log("error: " + JSON.stringify(e));
+            }
+        });
+    }
+
+    // populate the data table with JSON data
+    function populateDataTable(data) {
+        console.log("populating data table...");
+        console.log(data);
+
+        $('#dataTables-example').DataTable({
+            destroy: true,
+            responsive: true,
+            scrollX: true,
+            scrollCollapse: true,
+            autoWidth: false,
+            paging: true,
+            bDestroy: true,
+            bRetrieve: true,
+            "data": data,
+            "columns": [
+                { "title": "Room", "data": "roomTItle" },
+                { "title": "Layout", "data": "layoutTitle" },
+                { "title": "Capacity", "data": "capacity" },
+                { "title": "Month", "data": "month" },
+                { "title": "Year", "data": "year" },
+                { "title": "Days", "data": "days" },
+                { "title": "09:00", "data": "hour1" },
+                { "title": "10:00", "data": "hour2" },
+                { "title": "11:00", "data": "hour3" },
+                { "title": "12:00", "data": "hour4" },
+                { "title": "13:00", "data": "hour5" },
+                { "title": "14:00", "data": "hour6" },
+                { "title": "15:00", "data": "hour7" },
+                { "title": "16:00", "data": "hour8" },
+                { "title": "17:00", "data": "hour9" },
+                { "title": "18:00", "data": "hour10" },
+                { "title": "19:00", "data": "hour11" },
+                { "title": "20:00", "data": "hour12" },
+                { "title": "21:00", "data": "hour13" },
+            ]
+        });
+    }
+        //})();
+
+</script>

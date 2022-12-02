@@ -53,7 +53,13 @@ namespace BelajarASPNetMVC.Application.Services.Rooms
         {
             return _context.Room
                            .OrderBy(x => x.Id)
-                           .Select(x => new RoomDto { Id = x.Id, Title = x.Title, Capacity = x.Capacity, Description = x.Description, IsDeleted = x.IsDeleted })
+                           .Select(x => new RoomDto { 
+                               Id = x.Id, 
+                               Title = x.Title, 
+                               Capacity = x.Capacity, 
+                               Description = x.Description, 
+                               IsDeleted = x.IsDeleted 
+                           })
                            .AsEnumerable();
         }
 

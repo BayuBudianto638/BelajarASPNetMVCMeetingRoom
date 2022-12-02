@@ -47,7 +47,8 @@ namespace BelajarASPNetMVC.Controllers
             var room = _roomAppService.GetById(id);
             var model = _mapper.Map<RoomViewModel>(room);
 
-            ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(model.Image, 0, model.Image.Length);
+            ViewBag.Base64String = "data:image/png;base64," + 
+                Convert.ToBase64String(model.Image, 0, model.Image.Length);
 
             return View(model);
         }
@@ -96,7 +97,8 @@ namespace BelajarASPNetMVC.Controllers
             var room = _roomAppService.GetById(id);
             var model = _mapper.Map<EditRoomViewModel>(room);
 
-            ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(model.Image, 0, model.Image.Length);
+            ViewBag.Base64String = "data:image/png;base64," + 
+                Convert.ToBase64String(model.Image, 0, model.Image.Length);
 
             return View(model);
         }

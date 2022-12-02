@@ -7,6 +7,7 @@ using BelajarASPNetMVC.Application.Services.Beverages;
 using BelajarASPNetMVC.Application.Services.Equipments;
 using BelajarASPNetMVC.Application.Services.Layouts;
 using BelajarASPNetMVC.Application.Services.Rooms;
+using BelajarASPNetMVC.Application.Services.RoomSlots;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +29,18 @@ builder.Services.AddTransient<IBeverageAppService, BeverageAppService>();
 builder.Services.AddTransient<IEquipmentAppService, EquipmentAppService>();
 builder.Services.AddTransient<ILayoutAppService, LayoutAppService>();
 builder.Services.AddTransient<IRoomAppService, RoomAppService>();
+builder.Services.AddTransient<IRoomSlotAppService, RoomSlotAppService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -47,6 +58,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
