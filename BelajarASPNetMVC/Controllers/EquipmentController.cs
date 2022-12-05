@@ -13,15 +13,25 @@ namespace BelajarASPNetMVC.Controllers
     {
         private readonly IEquipmentAppService _equipmentAppService;
         private readonly IMapper _mapper;
-        public EquipmentController(IEquipmentAppService equipmentAppService, IMapper mapper)
+        private readonly IHttpContextAccessor _context;
+        public EquipmentController(IEquipmentAppService equipmentAppService, IMapper mapper, IHttpContextAccessor context)
         {
             _equipmentAppService = equipmentAppService;
             _mapper = mapper;
+            _context = context;
         }
 
         // GET: EquipmentController
         public ActionResult Index()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var equipment = _equipmentAppService.GetEquipment();
             var model = _mapper.Map<List<EquipmentViewModel>>(equipment);
 
@@ -31,6 +41,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: EquipmentController/Details/5
         public ActionResult Details(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var equipment = _equipmentAppService.GetById(id);
             var model = _mapper.Map<EquipmentViewModel>(equipment);
 
@@ -40,6 +58,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: EquipmentController/Create
         public ActionResult Create()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var model = new CreateEquipmentViewModel();
 
             return View(model);
@@ -66,6 +92,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: EquipmentController/Edit/5
         public ActionResult Edit(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var equipment = _equipmentAppService.GetById(id);
             var editEquipment = _mapper.Map<EditEquipmentViewModel>(equipment);
             return View(editEquipment);
@@ -94,6 +128,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: EquipmentController/Delete/5
         public ActionResult Delete(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var equipment = _equipmentAppService.GetById(id);
             var model = _mapper.Map<EditEquipmentViewModel>(equipment);
             return View(model);

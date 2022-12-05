@@ -14,14 +14,24 @@ namespace BelajarASPNetMVC.Controllers
     {
         private readonly ILayoutAppService _layoutAppService;
         private readonly IMapper _mapper;
-        public LayoutController(ILayoutAppService layoutAppService, IMapper mapper)
+        private readonly IHttpContextAccessor _context;
+        public LayoutController(ILayoutAppService layoutAppService, IMapper mapper, IHttpContextAccessor context)
         {
             _layoutAppService = layoutAppService;
             _mapper = mapper;
+            _context = context;
         }
 
         public ActionResult LayoutList()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var output = _layoutAppService.GetLayout();
             return PartialView(output);
         }
@@ -35,6 +45,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: LayoutController
         public ActionResult Index()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var layouts = _layoutAppService.GetLayout();
             var model = _mapper.Map<List<LayoutViewModel>>(layouts);
 
@@ -44,6 +62,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: LayoutController/Details/5
         public ActionResult Details(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var layout = _layoutAppService.GetById(id);
 
             var model = _mapper.Map<LayoutViewModel>(layout);
@@ -59,6 +85,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: LayoutController/Create
         public ActionResult Create()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var model = new CreateLayoutViewModel();
 
             return View(model);
@@ -98,6 +132,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: LayoutController/Edit/5
         public ActionResult Edit(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var layout = _layoutAppService.GetById(id);
             var model = _mapper.Map<EditLayoutViewModel>(layout);
             
@@ -148,6 +190,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: LayoutController/Delete/5
         public ActionResult Delete(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var layout = _layoutAppService.GetById(id);
             var model = _mapper.Map<EditLayoutViewModel>(layout);
 

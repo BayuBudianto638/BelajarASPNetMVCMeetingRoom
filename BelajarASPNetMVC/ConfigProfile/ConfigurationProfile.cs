@@ -4,12 +4,14 @@ using BelajarASPNetMVC.Application.Services.Equipments.Dto;
 using BelajarASPNetMVC.Application.Services.Layouts.Dto;
 using BelajarASPNetMVC.Application.Services.Rooms.Dto;
 using BelajarASPNetMVC.Application.Services.RoomSlots.Dto;
+using BelajarASPNetMVC.Application.Services.Users.Dto;
 using BelajarASPNetMVC.Data.Databases;
 using BelajarASPNetMVC.Models.Beverages;
 using BelajarASPNetMVC.Models.Equipments;
 using BelajarASPNetMVC.Models.Layouts;
 using BelajarASPNetMVC.Models.Rooms;
 using BelajarASPNetMVC.Models.RoomSlots;
+using BelajarASPNetMVC.Models.Users;
 
 namespace BelajarASPNetMVC.ConfigProfile
 {
@@ -94,6 +96,24 @@ namespace BelajarASPNetMVC.ConfigProfile
 
             CreateMap<RoomSlotDto, RoomSlot>();
             CreateMap<RoomSlot, RoomSlotDto>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+
+            CreateMap<CreateUserViewModel, UserDto>();
+            CreateMap<UserDto, CreateUserViewModel>();
+
+            CreateMap<EditUserViewModel, User>();
+            CreateMap<User, EditUserViewModel>();
+
+            CreateMap<EditUserViewModel, UserDto>();
+            CreateMap<UserDto, EditUserViewModel>();
+
+            CreateMap<UserViewModel, User>();
+            CreateMap<User, UserViewModel>();
+
+            CreateMap<UserViewModel, UserDto>();
+            CreateMap<UserDto, UserViewModel>();
         }
     }
 }

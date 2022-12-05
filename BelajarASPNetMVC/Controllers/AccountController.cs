@@ -7,10 +7,10 @@ namespace BelajarASPNetMVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly HttpContextAccessor _context;
+        private readonly IHttpContextAccessor _context;
         public readonly IUserAppService _userAppService;
 
-        public AccountController(HttpContextAccessor context, IUserAppService userAppService)
+        public AccountController(IHttpContextAccessor context, IUserAppService userAppService)
         {
             _context = context;
             _userAppService = userAppService;

@@ -8,6 +8,7 @@ using BelajarASPNetMVC.Application.Services.Equipments;
 using BelajarASPNetMVC.Application.Services.Layouts;
 using BelajarASPNetMVC.Application.Services.Rooms;
 using BelajarASPNetMVC.Application.Services.RoomSlots;
+using BelajarASPNetMVC.Application.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,9 @@ builder.Services.AddTransient<IEquipmentAppService, EquipmentAppService>();
 builder.Services.AddTransient<ILayoutAppService, LayoutAppService>();
 builder.Services.AddTransient<IRoomAppService, RoomAppService>();
 builder.Services.AddTransient<IRoomSlotAppService, RoomSlotAppService>();
+builder.Services.AddTransient<IUserAppService, UserAppService>();
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

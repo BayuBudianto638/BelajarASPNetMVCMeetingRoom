@@ -11,15 +11,25 @@ namespace BelajarASPNetMVC.Controllers
     {
         private readonly IRoomSlotAppService _roomSlotAppService;
         private readonly IMapper _mapper;
-        public RoomSlotController(IRoomSlotAppService roomSlotAppService, IMapper mapper)
+        private readonly IHttpContextAccessor _context;
+        public RoomSlotController(IRoomSlotAppService roomSlotAppService, IMapper mapper, IHttpContextAccessor context)
         {
             _roomSlotAppService = roomSlotAppService;
             _mapper = mapper;
+            _context = context;
         }
 
         // GET: RoomSlotController
         public ActionResult Index()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var output = _roomSlotAppService.GetAll();
 
             List<int> last10Years = new List<int>();
@@ -40,12 +50,28 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomSlotController/Details/5
         public ActionResult Details(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             return View();
         }
 
         // GET: RoomSlotController/Create
         public ActionResult Create()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var model = new CreateRoomSlotViewModel();
 
             List<int> last10Years = new List<int>();
@@ -130,6 +156,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomSlotController/Delete/5
         public ActionResult Delete(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             List<int> last10Years = new List<int>();
             int currentYear = DateTime.Now.Year;
 

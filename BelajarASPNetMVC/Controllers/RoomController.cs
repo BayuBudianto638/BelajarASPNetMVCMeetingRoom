@@ -14,11 +14,13 @@ namespace BelajarASPNetMVC.Controllers
     {
         private readonly IRoomAppService _roomAppService;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _context;
 
-        public RoomController(IRoomAppService roomAppService, IMapper mapper)
+        public RoomController(IRoomAppService roomAppService, IMapper mapper, IHttpContextAccessor context)
         {
             _roomAppService = roomAppService;
             _mapper = mapper;
+            _context = context;
         }
 
         public ActionResult RoomList()
@@ -35,6 +37,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomController
         public ActionResult Index()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var rooms = _roomAppService.GetAllRoom();
             var model = _mapper.Map<List<RoomViewModel>>(rooms);
 
@@ -44,6 +54,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomController/Details/5
         public ActionResult Details(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var room = _roomAppService.GetById(id);
             var model = _mapper.Map<RoomViewModel>(room);
 
@@ -56,6 +74,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomController/Create
         public ActionResult Create()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var model = new CreateRoomViewModel();
 
             return View(model);
@@ -94,6 +120,14 @@ namespace BelajarASPNetMVC.Controllers
         // GET: RoomController/Edit/5
         public ActionResult Edit(int id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var room = _roomAppService.GetById(id);
             var model = _mapper.Map<EditRoomViewModel>(room);
 
@@ -169,12 +203,5 @@ namespace BelajarASPNetMVC.Controllers
             var roomList = _roomAppService.GetAllRoom();
             return Json(roomList);
         }
-
-
-        //public JsonResult GetRoomById(int id)
-        //{
-        //    var roomList = _roomAppService.GetLayoutImageByRoomId(id);
-        //    return Json(roomList);
-        //}
     }
 }

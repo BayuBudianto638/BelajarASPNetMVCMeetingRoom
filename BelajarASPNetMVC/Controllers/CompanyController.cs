@@ -9,13 +9,23 @@ namespace BelajarASPNetMVC.Controllers
     public class CompanyController : Controller
     {
         private readonly ICompanyAppService _companyAppService;
+        private readonly IHttpContextAccessor _context;
 
-        public CompanyController(ICompanyAppService companyAppService)
+        public CompanyController(ICompanyAppService companyAppService, IHttpContextAccessor context)
         {
             _companyAppService = companyAppService;
+            _context = context;
         }
         public IActionResult Index()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var data = _companyAppService.GetCompanies();
 
             var output = new List<CompanyModel>();
@@ -36,6 +46,14 @@ namespace BelajarASPNetMVC.Controllers
 
         public IActionResult Details(int Id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var company = _companyAppService.GetById(Id);
 
             var model = new CompanyModel()
@@ -52,6 +70,14 @@ namespace BelajarASPNetMVC.Controllers
         // View Model Create
         public IActionResult Create()
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var model = new CreateCompanyViewModel();
 
             List<int> last10Years = new List<int>();
@@ -91,6 +117,14 @@ namespace BelajarASPNetMVC.Controllers
 
         public IActionResult Edit(int Id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var company = _companyAppService.GetById(Id);
 
             var model = new EditCompanyViewModel()
@@ -126,6 +160,14 @@ namespace BelajarASPNetMVC.Controllers
 
         public IActionResult Delete(int Id)
         {
+            var user = _context.HttpContext.Session.GetString("UserProfile");
+            var pass = _context.HttpContext.Session.GetString("UserPass");
+            var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
+            var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
+
+            if (Convert.ToInt16(IsLogin) == 0 && Convert.ToInt16(IsAdmin) == 0)
+                return RedirectToAction("AccessDenied", "Account");
+
             var company = _companyAppService.GetById(Id);
             var editCompanyViewModel = new EditCompanyViewModel()
             {
@@ -136,16 +178,6 @@ namespace BelajarASPNetMVC.Controllers
             };
 
             return View(editCompanyViewModel);
-
-            //try
-            //{
-            //    _companyAppService.Delete(Id);
-            //    return RedirectToAction("Index");
-            //}
-            //catch
-            //{
-            //    return RedirectToAction("Index");
-            //}
         }
 
         [HttpPost]

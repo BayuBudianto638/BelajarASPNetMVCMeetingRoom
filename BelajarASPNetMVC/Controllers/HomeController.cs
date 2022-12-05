@@ -7,9 +7,9 @@ namespace BelajarASPNetMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly HttpContextAccessor _context;
+        private readonly IHttpContextAccessor _context;
 
-        public HomeController(ILogger<HomeController> logger, HttpContextAccessor context)
+        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor context)
         {
             _logger = logger;
             _context = context;
@@ -22,7 +22,7 @@ namespace BelajarASPNetMVC.Controllers
             var IsLogin = _context.HttpContext.Session.GetInt32("IsLogin");
             var IsAdmin = _context.HttpContext.Session.GetInt32("IsAdmin");
 
-            _context.HttpContext.Session.SetString("UserProfile" ,"");
+            _context.HttpContext.Session.SetString("UserProfile", "");
             _context.HttpContext.Session.SetString("UserPass", "");
             _context.HttpContext.Session.SetString("IsLogin", "");
             _context.HttpContext.Session.SetString("IsAdmin", "");
